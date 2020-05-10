@@ -2,6 +2,8 @@ FROM golang:1.14.2-alpine AS build
 WORKDIR /src
 COPY . .
 
+RUN ls -lah static/
+
 RUN apk update && apk add git ca-certificates build-base
 
 RUN go get -d -v
