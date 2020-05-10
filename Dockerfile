@@ -1,28 +1,26 @@
 FROM golang:1.14.2-alpine AS build
-WORKDIR /src
-COPY . .
+WORKDIR /go/src/admin
+ADD . .
 
-RUN ls -lah static/
+# RUN ls -lah static/
 
-RUN apk update && apk add git ca-certificates build-base
+RUN apk add --no-cache build-base
 
-RUN go get -d -v
+RUN go get -d -v && \
+go test -cover -v && \
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ./admin .
 
-RUN go test -cover -v
-
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o bin/admin .
-
-FROM scratch
+FROM busybox:1.31.1-uclibc
 
 LABEL "maintainer"="XTRadio Ops <contact@xtradio.org"
 LABEL "version"="0.1"
 LABEL "description"="XTRadio Admin"
 
-COPY --from=build /src/bin/admin /bin/admin
+WORKDIR /opt/admin
 
-# ADD ./bin/admin /admin
+COPY --from=build /go/src/admin/admin .
+COPY --from=build /go/src/admin/static/ static/
 
-# #ADD ./bin/admin /admin
 EXPOSE 10000
 
-CMD ["/bin/admin"]
+CMD ["/opt/admin/admin"]
