@@ -1,28 +1,33 @@
 {
-  "_from": "@fortawesome/fontawesome-free@5.12.0",
-  "_id": "@fortawesome/fontawesome-free@5.12.0",
+  "_args": [
+    [
+      "@fortawesome/fontawesome-free@5.13.0",
+      "/home/akos/Dev/xtradio/admin/static"
+    ]
+  ],
+  "_from": "@fortawesome/fontawesome-free@5.13.0",
+  "_id": "@fortawesome/fontawesome-free@5.13.0",
   "_inBundle": false,
-  "_integrity": "sha512-vKDJUuE2GAdBERaQWmmtsciAMzjwNrROXA5KTGSZvayAsmuTGjam5z6QNqNPCwDfVljLWuov1nEC3mEQf/n6fQ==",
+  "_integrity": "sha512-xKOeQEl5O47GPZYIMToj6uuA2syyFlq9EMSl2ui0uytjY9xbe8XS0pexNWmxrdcCyNGyDmLyYw5FtKsalBUeOg==",
   "_location": "/@fortawesome/fontawesome-free",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "@fortawesome/fontawesome-free@5.12.0",
+    "raw": "@fortawesome/fontawesome-free@5.13.0",
     "name": "@fortawesome/fontawesome-free",
     "escapedName": "@fortawesome%2ffontawesome-free",
     "scope": "@fortawesome",
-    "rawSpec": "5.12.0",
+    "rawSpec": "5.13.0",
     "saveSpec": null,
-    "fetchSpec": "5.12.0"
+    "fetchSpec": "5.13.0"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-5.12.0.tgz",
-  "_shasum": "8ceb9f09edfb85ea18a6c7bf098f6f5dd5ffd62b",
-  "_spec": "@fortawesome/fontawesome-free@5.12.0",
-  "_where": "/Users/DANGER_DAVID/Sites/startbootstrap-themes/startbootstrap-sb-admin-2",
+  "_resolved": "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-5.13.0.tgz",
+  "_spec": "5.13.0",
+  "_where": "/home/akos/Dev/xtradio/admin/static",
   "author": {
     "name": "Dave Gandy",
     "email": "dave@fontawesome.com",
@@ -31,7 +36,6 @@
   "bugs": {
     "url": "http://github.com/FortAwesome/Font-Awesome/issues"
   },
-  "bundleDependencies": false,
   "contributors": [
     {
       "name": "Brian Talbot",
@@ -55,7 +59,6 @@
     }
   ],
   "dependencies": {},
-  "deprecated": false,
   "description": "The iconic font, CSS, and SVG framework",
   "engines": {
     "node": ">=6"
@@ -77,5 +80,5 @@
     "url": "git+https://github.com/FortAwesome/Font-Awesome.git"
   },
   "style": "css/fontawesome.css",
-  "version": "5.12.0"
+  "version": "5.13.0"
 }
