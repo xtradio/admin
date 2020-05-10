@@ -4,7 +4,7 @@ ADD . .
 
 # RUN ls -lah static/
 
-RUN apk add --no-cache build-base
+RUN apk add --no-cache build-base ca-certificates
 
 RUN go get -d -v && \
 go test -cover -v && \
@@ -17,6 +17,8 @@ LABEL "version"="0.1"
 LABEL "description"="XTRadio Admin"
 
 WORKDIR /opt/admin
+
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 COPY --from=build /go/src/admin/admin .
 COPY --from=build /go/src/admin/static/ static/
