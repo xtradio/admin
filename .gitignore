@@ -1,4 +1,4 @@
 *.swp
 files
-xtradio-api
-static/
+node_modules
+admin

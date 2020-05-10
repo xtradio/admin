@@ -8,21 +8,19 @@ RUN go get -d -v
 
 RUN go test -cover -v
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o bin/xtradio-api .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o bin/admin .
 
 FROM scratch
 
 LABEL "maintainer"="XTRadio Ops <contact@xtradio.org"
 LABEL "version"="0.1"
-LABEL "description"="XTRadio API"
+LABEL "description"="XTRadio Admin"
 
-COPY --from=build /src/bin/xtradio-api /bin/xtradio-api
+COPY --from=build /src/bin/admin /bin/admin
 
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+# ADD ./bin/admin /admin
 
-# ADD ./bin/xtradio-api /xtradio-api
-
-# #ADD ./bin/xtradio-api /xtradio-api
+# #ADD ./bin/admin /admin
 EXPOSE 10000
 
-CMD ["/bin/xtradio-api"]
+CMD ["/bin/admin"]
