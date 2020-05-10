@@ -24,8 +24,8 @@ func publishAPI() {
 	apiRouter.HandleFunc("/v1/song/upload", songUpload).
 		Methods("POST")
 	apiRouter.
-		PathPrefix("/static/").
-		Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+		PathPrefix("/").
+		Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static"))))
 
 	log.Fatal(http.ListenAndServe(":10000", apiRouter))
 }
