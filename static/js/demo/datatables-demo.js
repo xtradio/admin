@@ -9,7 +9,8 @@ $(document).ready(function() {
               { data: 'title' },
               { data: 'artist' },
               { data: 'lenght' },
-              { data: 'share' }],
+              { data: 'share' },
+              { data: 'playlist'}],
     columnDefs: [{
       targets: 0,
       data: 'image',

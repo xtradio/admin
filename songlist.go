@@ -20,6 +20,7 @@ type SongDetails struct {
 	Length   string `json:"lenght"`
 	Share    string `json:"share"`
 	URL      string `json:"url"`
+	Playlist string `json:"playlist"`
 }
 
 func songList(w http.ResponseWriter, r *http.Request) {
@@ -61,7 +62,7 @@ func getSongsFromDB(db *sql.DB) ([]SongDetails, error) {
 		}
 	}()
 
-	rows, err := db.Query("SELECT id, filename, artist, title, album, lenght, share, url, image FROM details ORDER BY id DESC")
+	rows, err := db.Query("SELECT id, filename, artist, title, album, lenght, share, url, image, playlist FROM details ORDER BY id DESC")
 
 	if err != nil {
 		return nil, err
@@ -70,7 +71,7 @@ func getSongsFromDB(db *sql.DB) ([]SongDetails, error) {
 	for rows.Next() {
 		var s SongDetails
 
-		rows.Scan(&s.ID, &s.Filename, &s.Artist, &s.Title, &s.Album, &s.Length, &s.Share, &s.URL, &s.Image)
+		rows.Scan(&s.ID, &s.Filename, &s.Artist, &s.Title, &s.Album, &s.Length, &s.Share, &s.URL, &s.Image, &s.Playlist)
 
 		if s.Image == "" {
 			s.Image = "default.png"
