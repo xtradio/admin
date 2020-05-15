@@ -16,11 +16,11 @@ func TestGetSongsFromDBSuccess(t *testing.T) {
 
 	mock.ExpectBegin()
 
-	rows := sqlmock.NewRows([]string{"id", "filename", "artist", "title", "album", "lenght", "share", "url", "image"}).
-		AddRow(1, "foobar.mp3", "foo", "bar", "foo-bar", 10, "http://test.com/foo-bar", "foo-bar", "foo.jpg").
-		AddRow(2, "barbaz.mp3", "bar", "baz", "bar-baz", 10, "http://test.com/bar-baz", "bar-baz", "bar.jpg")
+	rows := sqlmock.NewRows([]string{"id", "filename", "artist", "title", "album", "lenght", "share", "url", "image", "playlist"}).
+		AddRow(1, "foobar.mp3", "foo", "bar", "foo-bar", 10, "http://test.com/foo-bar", "foo-bar", "foo.jpg", "daily").
+		AddRow(2, "barbaz.mp3", "bar", "baz", "bar-baz", 10, "http://test.com/bar-baz", "bar-baz", "bar.jpg", "daily")
 
-	mock.ExpectQuery("SELECT id, filename, artist, title, album, lenght, share, url, image FROM details ORDER BY id DESC").WillReturnRows(rows)
+	mock.ExpectQuery("SELECT id, filename, artist, title, album, lenght, share, url, image, playlist FROM details ORDER BY id DESC").WillReturnRows(rows)
 	mock.ExpectCommit()
 
 	getData, _ := getSongsFromDB(db)
@@ -50,7 +50,7 @@ func TestGetSongsFromDBError(t *testing.T) {
 	defer db.Close()
 
 	mock.ExpectBegin()
-	mock.ExpectQuery("SELECT id, filename, artist, title, album, lenght, share, url, image FROM details ORDER BY id DESC").WillReturnError(fmt.Errorf("some error"))
+	mock.ExpectQuery("SELECT id, filename, artist, title, album, lenght, share, url, image, playlist FROM details ORDER BY id DESC").WillReturnError(fmt.Errorf("some error"))
 
 	_, err = getSongsFromDB(db)
 
