@@ -8,21 +8,6 @@ import (
 	"net/http"
 )
 
-// SongDetails to output details of the songs to json
-type SongDetails struct {
-	ID       int64  `json:"id"`
-	Title    string `json:"title"`
-	Artist   string `json:"artist"`
-	Show     string `json:"show"`
-	Image    string `json:"image"`
-	Filename string `json:"filename"`
-	Album    string `json:"album"`
-	Length   string `json:"lenght"`
-	Share    string `json:"share"`
-	URL      string `json:"url"`
-	Playlist string `json:"playlist"`
-}
-
 func songList(w http.ResponseWriter, r *http.Request) {
 	log.Printf("songList function called by %s", r.RemoteAddr)
 	var v struct {

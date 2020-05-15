@@ -35,6 +35,11 @@ func songUpdate(w http.ResponseWriter, r *http.Request) {
 	h.Response = "success"
 	h.Reason = fmt.Sprintf("Updated field with ID %s", r.FormValue("id"))
 
+	err = generatePlaylist(db)
+	if err != nil {
+		log.Println("Error updating the playlist ", err)
+	}
+
 	json.NewEncoder(w).Encode(h)
 	return
 }

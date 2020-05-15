@@ -78,6 +78,11 @@ func songUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = generatePlaylist(db)
+	if err != nil {
+		log.Println("Error updating the playlist ", err)
+	}
+
 	h.Response = "success"
 	h.Reason = fmt.Sprintf("Saved data with id %d", savedID)
 

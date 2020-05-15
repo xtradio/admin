@@ -9,6 +9,33 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// SongDetails to output details of the songs to json
+type SongDetails struct {
+	ID       int64  `json:"id"`
+	Title    string `json:"title"`
+	Artist   string `json:"artist"`
+	Show     string `json:"show"`
+	Image    string `json:"image"`
+	Filename string `json:"filename"`
+	Album    string `json:"album"`
+	Length   string `json:"lenght"`
+	Share    string `json:"share"`
+	URL      string `json:"url"`
+	Playlist string `json:"playlist"`
+}
+
+func init() {
+	db, err := dbConnection()
+	if err != nil {
+		log.Println("Connection to database failed: ", err)
+	}
+
+	err = generatePlaylist(db)
+	if err != nil {
+		log.Println("Error updating the playlist ", err)
+	}
+}
+
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "XTRadio Admin.")
 	log.Println(r.RemoteAddr, r.Method, r.URL)

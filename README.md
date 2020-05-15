@@ -31,3 +31,5 @@ Misc:
 > MUSIC_UPLOAD_DIR - ex. "files"
 
 > CDN_URL - ex. "localhost:10003"
+
+> PLAYLIST_FILE_LOCATION - ex. "playlist.txt"
