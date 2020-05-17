@@ -25,9 +25,41 @@ $(document).ready(function() {
         });
     })
 
+    $('form#upload').submit(function(event) {
+        event.preventDefault();
+        // var form = $('#upload')[0];
+        var formData = new FormData();
+        
+        var title = $('#title').val();
+        var artist = $('#artist').val();
+        var image = $("form#upload input[name=metadata]:checked").closest('tr').find("img").attr("src");
+        var url = $("form#upload input[name=metadata]:checked").closest('tr').find("a.sourceurl").attr("href");
+        var file = $("#file")[0].files[0];
+
+        formData.append("artist", artist);
+        formData.append("title", title);
+        formData.append("image", image);
+        formData.append("url", url);
+        formData.append("file", file);
+
+        $.ajax({
+            url: '/v1/song/upload',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            success: function(data){
+              console.log("Return data: " + data);
+            }
+        });
+
+        // console.log(formData);
+    });
+
     function convertor(song) {
         var img = '<img width="250" height="250" src="' + song.img + '" alt="' + song.title + '">';
-        var url = '<a href="' + song.sourceurl + '">' + song.sourceurl + '</a>';
+        var url = '<a class="sourceurl" href="' + song.sourceurl + '">' + song.sourceurl + '</a>';
         var duration = toMS(song.duration);
 
         console.log(img, url, duration);
@@ -47,7 +79,7 @@ $(document).ready(function() {
 
     function checkbox() {
         var html = `<div class="form-check">
-        <input class="form-check-input" type="checkbox" value="">
+        <input class="form-check-input" name="metadata" type="radio" value="">
       </div>`
 
       return html
