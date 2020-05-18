@@ -32,7 +32,7 @@ func generatePlaylist(db *sql.DB) error {
 		return err
 	}
 
-	rows, err := tx.Query("SELECT id, filename, artist, title, lenght, share FROM details WHERE playlist=? ORDER BY id DESC", "daily")
+	rows, err := tx.Query("SELECT id, filename, artist, title, lenght, share, image FROM details WHERE playlist=? ORDER BY id DESC", "daily")
 	if err != nil {
 		return err
 	}
@@ -40,9 +40,9 @@ func generatePlaylist(db *sql.DB) error {
 	for rows.Next() {
 		var s SongDetails
 
-		err := rows.Scan(&s.ID, &s.Filename, &s.Artist, &s.Title, &s.Length, &s.Share)
+		err := rows.Scan(&s.ID, &s.Filename, &s.Artist, &s.Title, &s.Length, &s.Share, &s.Image)
 
-		annotation := annotate(s.Artist, s.Title, s.Length, s.Share, s.Filename)
+		annotation := annotate(s.Artist, s.Title, s.Length, s.Share, s.Filename, s.Image)
 		fmt.Fprintln(f, annotation)
 		// fmt.Println(s.ID, s.Filename, s.Artist, s.Title, s.Length, s.Share)
 

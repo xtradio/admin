@@ -56,8 +56,8 @@ func dbConnection() (*sql.DB, error) {
 }
 
 // annotate:artist="Camila Cabello",title="Havana (Nitsuga Remix) / https://soundcloud.com/nitsuga-3/camila-cabello-havana-ft-young-thug-nitsuga-remix",length="229":/MUSIC/BACKUP/remix/puck/Camila_Cabello_-_Havana_(Nitsuga_Remix).mp3
-func annotate(artist string, title string, length string, share string, filename string) string {
-	annotation := fmt.Sprintf(`annotate:artist="%s",title="%s / %s",length="%s":%s`, artist, title, share, length, filename)
+func annotate(artist string, title string, length string, share string, filename string, image string) string {
+	annotation := fmt.Sprintf(`annotate:artist="%s",title="%s / %s",length="%s",image="%s",share="%s":%s`, artist, title, share, length, image, share, filename)
 
 	return annotation
 }

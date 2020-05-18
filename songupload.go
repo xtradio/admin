@@ -83,7 +83,7 @@ func songUpload(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error updating the playlist ", err)
 	}
 
-	err = queueSong(f.Artist, f.Title, fmt.Sprint(fileDuration), f.URL, filename)
+	err = queueSong(f.Artist, f.Title, fmt.Sprint(fileDuration), f.URL, image, filename)
 	if err != nil {
 		log.Println("Failed to queue song ", filename)
 	}
@@ -240,8 +240,8 @@ func sendToCDN(imgURL string) (string, error) {
 	return c.Filename, nil
 }
 
-func queueSong(artist string, title string, length string, share string, filename string) error {
-	annotation := annotate(artist, title, length, share, filename)
+func queueSong(artist string, title string, length string, share string, image string, filename string) error {
+	annotation := annotate(artist, title, length, share, image, filename)
 
 	command := fmt.Sprintf("request.push %s", annotation)
 

@@ -36,8 +36,9 @@ func TestAnnotate(t *testing.T) {
 	testURL := "http://foo.bar"
 	testLength := "300.03"
 	testFilename := "/path/to/foo/bar.mp3"
+	testImage := "fooBar.jpg"
 
-	getData := annotate(testArtist, testTitle, testLength, testURL, testFilename)
+	getData := annotate(testArtist, testTitle, testLength, testURL, testImage, testFilename)
 
 	if getData == "" {
 		t.Errorf("Expected annotation got empty string.")
