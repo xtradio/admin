@@ -228,7 +228,7 @@ func sendToCDN(imgURL string) (string, error) {
 	json.Unmarshal(f, &c)
 
 	if c.Response != "ok" {
-		errMsg := fmt.Errorf("failed to upload image to CDN")
+		errMsg := fmt.Errorf("failed to upload image to CDN: %s", c.Response)
 		return "", errMsg
 	}
 
