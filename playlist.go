@@ -41,9 +41,9 @@ func generatePlaylist(db *sql.DB) error {
 		var s SongDetails
 
 		err := rows.Scan(&s.ID, &s.Filename, &s.Artist, &s.Title, &s.Length, &s.Share)
-		// annotate:artist="Ivan Jack, Catullux",title="Rapture (Original Mix) [Redisco] (00:00) ",lenght="0":/MUSIC/BACKUP/remix/crayon/Ivan_Jack,_Catullux_-_Rapture_(Original_Mix)_[Redisco].mp3
-		annotate := fmt.Sprintf(`annotate:artist="%s",title="%s / %s",lenght="%s":%s`, s.Artist, s.Title, s.Share, s.Length, s.Filename)
-		fmt.Fprintln(f, annotate)
+
+		annotation := annotate(s.Artist, s.Title, s.Length, s.Share, s.Filename)
+		fmt.Fprintln(f, annotation)
 		// fmt.Println(s.ID, s.Filename, s.Artist, s.Title, s.Length, s.Share)
 
 		if err != nil {

@@ -29,3 +29,17 @@ func TestGetEnvFalse(t *testing.T) {
 	}
 
 }
+
+func TestAnnotate(t *testing.T) {
+	testArtist := "foo"
+	testTitle := "bar"
+	testURL := "http://foo.bar"
+	testLength := "300.03"
+	testFilename := "/path/to/foo/bar.mp3"
+
+	getData := annotate(testArtist, testTitle, testLength, testURL, testFilename)
+
+	if getData == "" {
+		t.Errorf("Expected annotation got empty string.")
+	}
+}

@@ -28,6 +28,7 @@ func init() {
 	db, err := dbConnection()
 	if err != nil {
 		log.Println("Connection to database failed: ", err)
+		return
 	}
 
 	err = generatePlaylist(db)
