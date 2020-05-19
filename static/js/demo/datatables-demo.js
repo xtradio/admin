@@ -52,7 +52,7 @@ $(document).ready(function() {
           formData.append("length", length);
           // formData.append("image", image);
 
-          console.log("Queue button was pushed " + image + " " + share)
+          console.log("Queue button was pushed " + share)
 
           $.ajax({
             url: '/v1/song/queue',
