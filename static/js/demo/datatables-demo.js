@@ -1,7 +1,74 @@
 // Call the dataTables jQuery plugin
 $(document).ready(function() {
   $('#dataTable').DataTable( {
-    select: 'single',
+    dom: 'Bfrtip',
+    select: {
+      style: 'single'
+    },
+    buttons: [
+      {
+        // text: 'Edit',
+        titleAttr: "Edit",
+        enabled: false,
+        className: "fas fa-pen button",
+        tag: "button",
+        action: function () {
+          // var count = table.rows( { selected: true } ).count();
+          var row = this.rows( { selected: true } );
+
+          var filename = row.data()[0]["filename"];
+          var id = row.data()[0]["id"];
+          var artist = row.data()[0]["artist"];
+          var title = row.data()[0]["title"];
+          var share = row.data()[0]["share"];
+          var length = row.data()[0]["lenght"]
+
+          console.log("Edit button was pushed " + filename + " " + artist)
+        }
+      },
+      {
+        // text: 'Queue',
+        titleAttr: "Queue",
+        enabled: false,
+        className: "fas fa-play button",
+        tag: "button",
+        action: function () {
+          // var count = table.rows( { selected: true } ).count();
+          var row = this.rows( { selected: true } );
+
+          var filename = row.data()[0]["filename"];
+          // var id = row.data()[0]["id"];
+          var artist = row.data()[0]["artist"];
+          var title = row.data()[0]["title"];
+          var share = row.data()[0]["share"];
+          var length = row.data()[0]["lenght"];
+          // var image = row.data()[0]["image"];
+
+          var formData = new FormData();
+          formData.append("artist", artist);
+          formData.append("title", title);
+          formData.append("share", share);
+          formData.append("filename", filename);
+          formData.append("length", length);
+          // formData.append("image", image);
+
+          console.log("Queue button was pushed " + image + " " + share)
+
+          $.ajax({
+            url: '/v1/song/queue',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            success: function(data){
+              // this.disable();
+              console.log("Return data: " + data);
+            }
+        });
+        }
+      }
+    ],
     ajax: '/v1/song/list',
     dataSrc: 'data',
     columns: [{ data: 'image' },
@@ -23,5 +90,19 @@ $(document).ready(function() {
         visible: false,
         searchable: false
     }]
-  } );
+  })
+  .on( 'select', function ( e, dt, type, indexes ) {
+    var selectedRows = dt.rows( { selected: true } ).count();
+ 
+    dt.button( 0 ).enable( selectedRows === 1 );
+    dt.button( 1 ).enable( selectedRows === 1 );
+    // dt.button( 0 ).( selectedRows > 0 );
+  })
+  .on( 'deselect', function ( e, dt, type, indexes ) {
+    var selectedRows = dt.rows( { selected: true } ).count();
+
+    dt.button( 0 ).disable( selectedRows === 1 );
+    dt.button( 1 ).enable( selectedRows === 1 );
+    // dt.button( 0 ).( selectedRows > 0 );
+  });
 });

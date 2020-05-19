@@ -62,7 +62,15 @@ function modules() {
   var dataTables = gulp.src([
       './node_modules/datatables.net/js/*.js',
       './node_modules/datatables.net-bs4/js/*.js',
-      './node_modules/datatables.net-bs4/css/*.css'
+      './node_modules/datatables.net-bs4/css/*.css',
+      './node_modules/datatables.net-responsive/js/*.js',
+      './node_modules/datatables.net-responsive-bs4/js/*.js',
+      './node_modules/datatables.net-select/js/*.js',
+      './node_modules/datatables.net-select-bs4/js/*.js',
+      './node_modules/datatables.net-select-bs4/css/*.css',
+      './node_modules/datatables.net-buttons/js/*.js',
+      './node_modules/datatables.net-buttons-dt/js/*.js',
+      './node_modules/datatables.net-buttons-dt/css/*.css',
     ])
     .pipe(gulp.dest('./vendor/datatables'));
   // Font Awesome
