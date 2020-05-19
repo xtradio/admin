@@ -241,7 +241,9 @@ func sendToCDN(imgURL string) (string, error) {
 }
 
 func queueSong(artist string, title string, length string, share string, image string, filename string) error {
-	annotation := annotate(artist, title, length, share, image, filename)
+	annotation := annotate(artist, title, length, share, filename, image)
+
+	log.Println(annotation)
 
 	command := fmt.Sprintf("request.push %s", annotation)
 

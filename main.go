@@ -53,6 +53,8 @@ func publishAPI() {
 		Methods("POST")
 	apiRouter.HandleFunc("/v1/song/update", songUpdate).
 		Methods("POST")
+	apiRouter.HandleFunc("/v1/song/queue", songQueue).
+		Methods("POST")
 	apiRouter.
 		PathPrefix("/").
 		Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static"))))
