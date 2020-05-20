@@ -62,8 +62,8 @@ $(document).ready(function() {
             processData: false,
             method: 'POST',
             success: function(data){
-              // this.disable();
-              console.log("Return data: " + data);
+              response = JSON.parse(data)
+              notification(response.response, response.reason, "info");
             }
         });
         }
@@ -105,4 +105,18 @@ $(document).ready(function() {
     dt.button( 1 ).enable( selectedRows === 1 );
     // dt.button( 0 ).( selectedRows > 0 );
   });
+
+  function notification(strong, regular, type) {
+    var html = `
+    <div class="alert alert-` + type + ` alert-dismissible fade show" role="alert">
+        <i class="fas fa-info fa-sm fa-fw mr-2"></i>
+        <strong>` + strong + `</strong> ` + regular + `
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    `;
+
+    $("#notifications").append(html);
+}
 });
