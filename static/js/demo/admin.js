@@ -43,6 +43,24 @@ $(document).ready(function() {
         formData.append("file", file);
 
         $.ajax({
+            xhr: function() {
+                var progress = $('.progress-bar'),
+                    xhr = $.ajaxSettings.xhr();
+
+                progress.show();
+                // $('.progress-bar').css('width', valeur+'%').attr('aria-valuenow', valeur);
+                xhr.upload.onprogress = function(ev) {
+                    if (ev.lengthComputable) {
+                        var percentComplete = parseInt((ev.loaded / ev.total) * 100);
+                        progress.css('width', percentComplete+'%').attr('aria-valuenow', percentComplete);
+                        if (percentComplete === 100) {
+                            progress.hide().css('width', '0%').attr('aria-valuenow', '0');
+                        }
+                    }
+                };
+
+                return xhr;
+            },
             url: '/v1/song/upload',
             data: formData,
             cache: false,
