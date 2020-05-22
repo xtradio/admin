@@ -21,7 +21,17 @@ $(document).ready(function() {
           var artist = row.data()[0]["artist"];
           var title = row.data()[0]["title"];
           var share = row.data()[0]["share"];
-          var length = row.data()[0]["lenght"]
+          var length = row.data()[0]["lenght"];
+          var image = row.data()[0]["image"];
+
+          $("#artist").val(artist);
+          $("#title").val(title);
+          $("#filename").val(filename);
+          $("#image").attr('src', image);
+          $("#share").val(share);
+          $("#length").val(length);
+
+          $("#editModal").modal('toggle');
 
           console.log("Edit button was pushed " + filename + " " + artist)
         }
@@ -67,7 +77,18 @@ $(document).ready(function() {
             }
         });
         }
-      }
+      },
+      {
+        // text: 'Edit',
+        titleAttr: "Info",
+        enabled: true,
+        className: "fas fa-info button",
+        tag: "button",
+        action: function () {
+          // var count = table.rows( { selected: true } ).count();
+          $("#editModal").modal('toggle');
+        }
+      },
     ],
     ajax: '/v1/song/list',
     dataSrc: 'data',
@@ -84,6 +105,12 @@ $(document).ready(function() {
       data: 'image',
       render: function(data) {
         return '<img height="30%" width="30%" src="'+data+'">';
+      }},
+      {
+        targets: 5,
+        data: 'lenght',
+        render: function(data) {
+          return toS(data);
       }},
       {
         targets: 1,
@@ -119,4 +146,91 @@ $(document).ready(function() {
 
     $("#notifications").append(html);
 }
+
+  function convertor(song) {
+    var img = '<img width="100" height="100" src="' + song.img + '" alt="' + song.title + '">';
+    var url = '<a class="sourceurl" href="' + song.sourceurl + '">' + song.sourceurl + '</a>';
+    var duration = toMS(song.duration);
+
+    console.log(img, url, duration);
+
+    return [img, url, duration]
+
+  };
+
+  function toMS(duration) {
+    var seconds = duration / 1000;
+    var date = new Date(0);
+    date.setSeconds(seconds); // specify value for SECONDS here
+    var timeString = date.toISOString().substr(14, 5);
+    return timeString;
+  };
+
+  function toS(duration) {
+    var date = new Date(0);
+    date.setSeconds(duration); // specify value for SECONDS here
+    var timeString = date.toISOString().substr(14, 5);
+    return timeString;
+  };
+
+  function checkbox() {
+    var html = `<div class="form-check">
+    <input class="form-check-input" name="metadata" type="radio" value="">
+    </div>`
+
+    return html
+  }
+
+  $('#search').on('click', function() {
+    console.log("Searched was pushed.");
+
+    var html = `
+    <table id="song-selector" class="table table-sm">
+      <thead>
+        <tr>
+          <th>Select</th>
+          <th>Image</th>
+          <th>Artist</th>
+          <th>Title</th>
+          <th>Duration</th>
+          <th>User</th>
+          <th>Service</th>
+        </tr>
+      </thead>
+      <tbody id="song-selector">
+      <tr></tr>
+      </tbody>
+    </table>
+    `
+
+    $("form#edit").after(html);
+
+    var artist = $('#artist').val();
+    var title = $('#title').val();
+
+    $.post( "/search", { artist: artist, title: title }, "json")
+      .done(function( data ) {
+        console.log( "Data Loaded: " + data );
+        data = jQuery.parseJSON(data);
+
+        if (data) {
+          data.forEach(function(song) { 
+              [song.img, song.sourceurl, song.duration] = convertor(song);
+              $('#song-selector tr:last').after("<tr></tr>");
+              $('#song-selector tr:last').append("<td>" + checkbox()  + "</td>")
+              Object.keys(song).forEach(function(key) {
+                if ( key != "sourceurl" && key != "bpm" && key != "genre" && key != "license" ) {
+                  $('#song-selector tr:last').append("<td>" + song[key] + "</td>")
+                }
+              })
+          });
+        };
+      });
+  });
+
+  $('#editModal').on('hidden.bs.modal', function () {
+    $("form#edit").get(0).reset();
+    $("table#song-selector").remove();
+    // do something…
+});
 });
