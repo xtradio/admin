@@ -13,7 +13,6 @@ func TestUpdateSong(t *testing.T) {
 	title := "bar"
 	image := "foo-bar.jpg"
 	share := "http://foo.bar/baz"
-	playlist := "daily"
 
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -25,7 +24,7 @@ func TestUpdateSong(t *testing.T) {
 	mock.ExpectExec("UPDATE details").WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 
-	err = updateSong(db, id, artist, title, share, image, playlist)
+	err = songUpdateDbCall(db, id, artist, title, share, image)
 
 	if err != nil {
 		t.Errorf("Assert failed, was not expecting an error, got %s", err)

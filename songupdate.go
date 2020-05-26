@@ -23,7 +23,16 @@ func songUpdate(w http.ResponseWriter, r *http.Request) {
 		log.Println("Connection to database failed: ", err)
 	}
 
-	err = updateSong(db, r.FormValue("id"), r.FormValue("artist"), r.FormValue("title"), r.FormValue("share"), r.FormValue("image"), r.FormValue("playlist"))
+	image, err := sendToCDN(r.FormValue("image"))
+	if err != nil {
+		log.Printf("Failed to send image to CDN: %s", err)
+		h.Response = "fail"
+		h.Reason = fmt.Sprintf("Failed to update db: %s", err)
+		json.NewEncoder(w).Encode(h)
+		return
+	}
+
+	err = songUpdateDbCall(db, r.FormValue("filename"), r.FormValue("artist"), r.FormValue("title"), r.FormValue("url"), image)
 	if err != nil {
 		log.Printf("Update failed: %s", err)
 		h.Response = "fail"
@@ -33,7 +42,7 @@ func songUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.Response = "success"
-	h.Reason = fmt.Sprintf("Updated field with ID %s", r.FormValue("id"))
+	h.Reason = fmt.Sprintf("Updated field %s", r.FormValue("filename"))
 
 	err = generatePlaylist(db)
 	if err != nil {
@@ -44,7 +53,7 @@ func songUpdate(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func updateSong(db *sql.DB, id string, artist string, title string, share string, image string, playlist string) error {
+func songUpdateDbCall(db *sql.DB, filename string, artist string, title string, share string, image string) error {
 	tx, err := db.Begin()
 	if err != nil {
 		return err
@@ -59,7 +68,7 @@ func updateSong(db *sql.DB, id string, artist string, title string, share string
 		}
 	}()
 
-	if _, err = tx.Exec("UPDATE details SET artist = ?, title = ?, share = ?, image = ?, playlist = ? WHERE id = ?", artist, title, share, image, playlist, id); err != nil {
+	if _, err = tx.Exec("UPDATE details SET artist = ?, title = ?, share = ?, image = ? WHERE filename = ?", artist, title, share, image, filename); err != nil {
 		return err
 	}
 

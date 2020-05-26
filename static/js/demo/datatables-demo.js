@@ -29,11 +29,9 @@ $(document).ready(function() {
           $("#filename").val(filename);
           $("#image").attr('src', image);
           $("#share").val(share);
-          $("#length").val(length);
+          $("#length").val(toS(length));
 
           $("#editModal").modal('toggle');
-
-          console.log("Edit button was pushed " + filename + " " + artist)
         }
       },
       {
@@ -61,8 +59,6 @@ $(document).ready(function() {
           formData.append("filename", filename);
           formData.append("length", length);
           // formData.append("image", image);
-
-          console.log("Queue button was pushed " + share)
 
           $.ajax({
             url: '/v1/song/queue',
@@ -145,14 +141,12 @@ $(document).ready(function() {
     `;
 
     $("#notifications").append(html);
-}
+  }
 
   function convertor(song) {
     var img = '<img width="100" height="100" src="' + song.img + '" alt="' + song.title + '">';
     var url = '<a class="sourceurl" href="' + song.sourceurl + '">' + song.sourceurl + '</a>';
     var duration = toMS(song.duration);
-
-    console.log(img, url, duration);
 
     return [img, url, duration]
 
@@ -182,8 +176,6 @@ $(document).ready(function() {
   }
 
   $('#search').on('click', function() {
-    console.log("Searched was pushed.");
-
     var html = `
     <table id="song-selector" class="table table-sm">
       <thead>
@@ -193,8 +185,8 @@ $(document).ready(function() {
           <th>Artist</th>
           <th>Title</th>
           <th>Duration</th>
+          <th>URL</th>
           <th>User</th>
-          <th>Service</th>
         </tr>
       </thead>
       <tbody id="song-selector">
@@ -210,7 +202,6 @@ $(document).ready(function() {
 
     $.post( "/search", { artist: artist, title: title }, "json")
       .done(function( data ) {
-        console.log( "Data Loaded: " + data );
         data = jQuery.parseJSON(data);
 
         if (data) {
@@ -219,8 +210,8 @@ $(document).ready(function() {
               $('#song-selector tr:last').after("<tr></tr>");
               $('#song-selector tr:last').append("<td>" + checkbox()  + "</td>")
               Object.keys(song).forEach(function(key) {
-                if ( key != "sourceurl" && key != "bpm" && key != "genre" && key != "license" ) {
-                  $('#song-selector tr:last').append("<td>" + song[key] + "</td>")
+                if ( key != "service" && key != "bpm" && key != "genre" && key != "license" ) {
+                  $('#song-selector tr:last').append("<td>" + song[key] + "</td>");
                 }
               })
           });
@@ -228,9 +219,41 @@ $(document).ready(function() {
       });
   });
 
+  $('#submit').on('click', function() {
+    event.preventDefault();
+    var formData = new FormData();
+
+    var title = $('#title').val();
+    var artist = $('#artist').val();
+    var filename = $('#filename').val();
+
+    var image = $(".form-check input:checked").closest('tr').find('img').attr('src');
+    var url = $(".form-check input:checked").closest('tr').find("a.sourceurl").attr("href");
+
+    formData.append("artist", artist);
+    formData.append("title", title);
+    formData.append("image", image);
+    formData.append("url", url);
+    formData.append("filename", filename);
+
+    $.ajax({
+      url: '/v1/song/update',
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      success: function(data){
+        $('#editModal').modal('toggle');
+        response = JSON.parse(data)
+        notification(response.response, response.reason, "info");
+      }
+    });
+  });
+
   $('#editModal').on('hidden.bs.modal', function () {
     $("form#edit").get(0).reset();
     $("table#song-selector").remove();
     // do something…
-});
+  });
 });
